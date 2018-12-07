@@ -1,7 +1,6 @@
 function [features] = glcm_features(img, offset, rec_size)
 %UNTITLED4 Summary of this function goes here
 %   Detailed explanation goes here
-img = rbg2gray(img);
 [y1,x1,~] = size(img);
 features = zeros(16,(fix((x1 - rec_size(1) + offset) / offset) * fix((y1 - rec_size(2) + offset) / offset)));
 i = 1;
