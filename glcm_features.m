@@ -17,9 +17,9 @@ for x = 1:offset:x1
         stats = graycoprops(glcms);
         for stat = stats
             features(1:4, i) = stats.Contrast;
-            features(5:8, i) = stats.Correlation;
-            features(9:12, i) = stats.Energy;
-            features(13:16, i) = stats.Homogeneity;
+            features(5:8, i) = stats.Energy;
+            features(9:12, i) = stats.Homogeneity;
+            features(13:16, i) = entropy(cropped_image);
         end
         i = i + 1;
     end

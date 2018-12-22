@@ -1,10 +1,6 @@
-function fractalDimension(path)
-    i = imread(path);
-    ig = rgb2gray(i);
-    igd = mat2gray(ig);
-    ph = phasecong3(igd, 'k', 5);
-    imageToProcess = (ph < 0.5);
-    [n,r] = boxcount(imageToProcess,'slope');
+function [fractalDimension] = fractalDimension(edges)
+    imageToProcess = (edges < 0.5);
+    [n,r] = boxcount(imageToProcess);
     df = -diff(log(n))./diff(log(r));
-    fractalDimension = mean(df(4:8))
+    fractalDimension = mean(df(4:8));
 end
