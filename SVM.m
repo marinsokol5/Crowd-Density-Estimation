@@ -1,10 +1,6 @@
 SVMModel_fractal = fitcecoc(fractal_svm', l_svm')
-%rade kad ih transponiras, cini mi se da im ne pase kad im das vise 
-%y vrijednosti u jednom retku pa treba ic po stupcima. Osim toga, 
-%SVM ne radi za vise klasa, pa je zato tu metoda fitcecoc koja koristi
-%SVM za binarni klasifikator i one vs one 
-
-%loss_fractal = SVMModel.loss(fractal_svm', l_svm')
-
-%SVMModel_tiocm = fitcsvm(tiocm_svm, l_svm,'Standardize',true)
-%loss_tiocm = SVMModel.loss(tiocm_svm, l_svm)
+loss_fractal = SVMModel_fractal.loss(fractal_svm', l_svm')
+h_SVM_fractal = SVMModel_fractal.predict(fractal_svm')
+SVMModel_tiocm = fitcecoc(tiocm_svm, l_svm')
+loss_tiocm = SVMModel_tiocm.loss(tiocm_svm, l_svm')
+h_SVM_tiocm = SVMModel_tiocm.predict(tiocm_svm)
