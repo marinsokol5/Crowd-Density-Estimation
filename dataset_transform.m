@@ -3,8 +3,7 @@ for l = 1: 60
    l_svm(l) = labels{1, l};
    fractal_svm(l) = fractal_dataset{1, l};
 end
-l_svm = l_svm'
-fractal_svm = fractal_svm'
+l_svm = transpose(l_svm)
 tiocm_svm = zeros(60, 6);
 for l = 1: 60
     for j = 1: 6
