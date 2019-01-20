@@ -10,11 +10,11 @@ for l = 1: 60
     end
 end
 
-glcm_svm = zeros(60,16 * 1521);
-for l = 1: 60
+glcm_svm = zeros(60,16, 1521);
+for l = 1: 21
     for j = 1: 16
         for k = 1: 1521
-            glcm_svm(l, (j - 1) * 1521 + k) = glcm_dataset{1, l}(j, k);
+            glcm_svm(l, j, k) = glcm_dataset{1, l}(j, k);
         end
     end
 end
