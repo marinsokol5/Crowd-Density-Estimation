@@ -1,0 +1,68 @@
+\documentclass{report}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath} 
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage[section]{placeins}
+\usepackage{placeins}
+\usepackage{subcaption}
+\usepackage[croatian]{babel}
+\usepackage[round]{natbib}
+\bibliographystyle{plainnat}
+
+\begin{document}
+
+\title{Metode procjene gustoće mnoštva ljudi}
+\author{Luka Banović, Matej Grcić, Mislav Jurić, Marin Sokol, Andrea Vodopija}
+
+\maketitle
+
+\chapter{Konceptualno rješenje zadatka}
+Osnovna ideja projekta je usporedba različitih načina ekstrakcije značajki iz slike u procjeni gustoće mnoštva ljudi. Metode ekstrakcije se uspoređuju na sljedeći način: iz skupa fotografija koje predstavljaju grupe ljudi različite gustoće generira se skup podataka, predstavivši svaku fotografiju kao skup značajki dobiven jednom od metoda. Nakon toga, odaberemo samo jedan model klasifikatora i uspoređujemo njegove ispitne rezultate dobivene nakon treniranja na svakom od dobivenih skupova značajki. Pretpostavka je da, ako klasifikator ostvaruje bolje rezultate nakon što je treniran nad skupom podataka dobivenim jednom metodom ekstrakcije značajki nego kad se treniran nad skupom dobivenim drugom metodom, tada je prva metoda pogodnija za ekstrakciju značajki za problem procjene gustoće gomile ljudi. Dakle, bolji rezultati klasifikatora – pogodnija metoda.
+
+Dakako, uspješnost usporedbe ovisi i o odabranom klasifikatoru. U radu \cite{main_paper}, gdje se se autori bavili navedenom problematikom, korištena je samoorganizirajuća mreža. Problem je što optimizacija ovog modela nije u zatvorenom obliku pa postoji mogućnost da će rezultati biti neupotrebljivi - u projektu se koristi relativno malen skup slika (60 primjeraka) što znatno umanjuje vjerojatnost da će postupak opitmizacije konvergirati globalnom optimumu. Umjesto toga, odabran je SVM kao klasifikator jer je otporniji na navedene probleme. O bazi slika korištenoj u projektu bit će više rečeno u idućim poglavljima.
+
+Metode procjene koje su uspoređuju su GLDM, MFD i TIOCM. Prve dvije metode predložene su u ranijim radovima (\cite{gldm}, \cite{mfd}), a TIOCM je metoda koja je predstavljena u \cite{main_paper}. U nastavku će biti objašnjen postupak pripremanja skupa slika za ekstrakciju značajki, detaljno predstavljene korištene metode i opisan način rada SVM-a.
+
+\section{Priprema skupa slika}
+Da bismo mogli koristiti pojedinu sliku u nekoj od metoda, potrebno ju je prilagoditi očekivanom ulazu za svaku od metoda. Zato, prvo svaku sliku iz skupa, koja je originalno u boji, transformiramo eliminirajući boje, ostavivši samo sliku s nijansama sive. Dobivši skup slika bez boje, generiramo i skup slika na kojima su samo obrisi likova sa slika bez boje pomoću metode fazne kongruencije.
+
+Fazna kongruencija (engl. \textit{phase congruency}, \cite{phasecong}) postupak je pomoću kojeg se na slikama detektiraju obrisi oblika. Osnovna ideja je da, nakon što se signal razvije u Fourierov red, provjeri svaku komponentu tog razvoja, koja je sinusoida. Pokazuje se da su na mjestima gdje postoje obrisi, komponente razvoja u Fourierov red pokazuju visoku uređenost, odnosno u fazi su.
+
+Ako je  
+\begin{align*}
+F(x) = \sum_n A_n\cos(n \omega x + \phi_n)
+\end{align*}
+razvoj signala u Fourierov red, tada se može definirati funkcija fazne kongruencije kao
+\begin{align*}
+PC(x) = \max_{\theta \in [0, 2\pi]}\frac{\sum_n A_n \cos(n \omega x + \phi_n - \theta)}{\sum_n A_n}.
+\end{align*}
+Visoka vrijednost funkcije fazne kongruencije označava da su komponente razvoja u fazi, tj. ondje gdje je funkcija fazne kongruencije maksimalna, težinska standardna devijacija faznih kutova je minimalna.
+
+Ovako definirana fazna kongruencija vrlo je osjetljiva na šum u signalu. Međutim, postoje unaprijeđene gotove implementacije detekcije obrisa pomoću fazne kongruencije koje sadrže parametar kojim se odabire osjetljivost na šum. Zato je korištena gotova implementacija u MATLAB-u uz parametar $k = 10$ (preporučena vrijednost za slike s većom količinom šuma, pretpostavljena vrijednost je $k = 2$). Parametar k označava broj standardnih devijacija od srednje vrijednosti energije šuma gdje postavljamo prag za šum. 
+
+\section{GLDM}
+Prva metoda ekstrakcije je GLDM (engl. \textit{Grey Level Dependency Matrix}). Osnova metode je konstrukcija matrice uvjetnih vjerojatnosti pojavljivanja para određenih nijansi sive, ovisno o udaljenosti $d$ i kutu $\theta$ kojim su dva piksela razdvojena. Prema \cite{main_paper}, korišteni parametri u ovom projektu su $d = 1$ i $\theta \in \left\lbrace0^\circ, 45^\circ, 90^\circ, 135^\circ\right\rbrace$.
+Neka je $G$ broj nijansi sive koje se nalaze na slici bez boje. Tada se definiraju 4 veličine koje se računaju iz dobivene matrice, a opisuju promatranu sliku - kontrast, homogenost, energija i entropija, uz redom oznake $C$, $H$, $Eg$ i $Et$.
+
+\begin{align*}
+C(d, \theta) &= \sum_{i=0}^{G-1}\sum_{j=0}^{G-1}(i-j)^2f(i,j|d, \theta)\\
+H(d, \theta) &= \sum_{i=0}^{G-1}\sum_{j=0}^{G-1}\frac{f(i,j|d, \theta)}{1 + (i-j)^2}\\
+Eg(d, \theta) &= \sum_{i=0}^{G-1}\sum_{j=0}^{G-1}f(i,j|d, \theta)^2\\
+Et(d, \theta) &= -\sum_{i=0}^{G-1}\sum_{j=0}^{G-1}f(i,j|d, \theta)\log f(i, j |d, \theta)\\
+\end{align*}
+
+Kontrast je veličina koja predstavlja količinu lokalno kolebanje nijansi sive, iz čega slijedi da njegova visoka vrijednost može značiti prisutnost bridova ili šuma na slici. Homogenost, s druge strane, mjeri glatkoću distribucije nijansi sive na slici, što znači da je otprilike obrnuto proporcionalna s kontrastom.
+
+Energija mjeri uniformnost distribucije nijansi sive na slici pa će slike s manjim brojem nijansi sive imati veću energiju. I za kraj, entropija je veličina koja mjeri neuređenost na slici - slično kao što su kontrast i homogenost povezani, povezani su i energija i entropija.
+
+Ekstrakcija značajki odvija se na sljedeći način: slike dimenzija $400 \times 400$ prelazi se pomičnim prozorom veličine $20 \times 20$ uz korak $r = 10$. Za svaki sliku iz pomičnog prozora, generiraju se 4 matrice GLDM, prošavši kroze sve kombinacije $d$ i $\theta$. Iz svake se matrice izračunaju opisane veličine. To znači da za svaku podsliku dobivamo 16 značajki, a na svakoj slici prolazimo kroz 1521 podsliku. Slijedi da sa svake slike ekstrahiramo $16 \cdot 1521 = 24336$ značajki koje je opisuju. Iz tog razloga, potrebno je reducirati dimenzionalnost dobivenih vektora značajki, o čemu će biti više riječi kod analize rezultata.
+
+\section{MFD}
+Druga metoda koja je korištena u projektu je MFD (Minkowski Fractal Dimension, ili još znano kao Minkowski-Boulignand Fractal Dimension). Prvi je put ova veličina korištena u radi \cite{mfd}.
+
+\nocite{phasecong_impl}
+\bibliography{literatura}	
+
+\end{document}

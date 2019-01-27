@@ -7,4 +7,4 @@ for i = 1:length(images)
    fractal_dataset{i} = fractalDimension(grayscale);
    tiocm_dataset{i} = tiocm_features(edges);
 end
-
+    

@@ -1,0 +1,38 @@
+\begin{thebibliography}{5}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[pha()]{phasecong_impl}
+Matlab and octave functions for computer vision and image processing.
+\newblock
+  \url{https://www.peterkovesi.com/matlabfns/PhaseCongruency/phasecong3.m}.
+\newblock Pristup: 24. prosinca 2018.
+
+\bibitem[Kovesi(2003)]{phasecong}
+Peter Kovesi.
+\newblock Phase congruency detects corners and edges.
+\newblock In \emph{DICTA}, January, 2003.
+
+\bibitem[Marana et~al.(1997)Marana, Velastin, Costa, and Lotufo]{gldm}
+A.~N. Marana, S.~A. Velastin, L.~F. Costa, and R.~A. Lotufo.
+\newblock Estimation of crowd density using image processing.
+\newblock In \emph{IEE Colloquium on Image Processing for Security Applications
+  (Digest No: 1997/074)}, pages 11/1--11/8, March 1997.
+
+\bibitem[Marana et~al.(1999)Marana, Costa, Lotufo, and Velastin]{mfd}
+A.~N. Marana, L.~Da~Fontoura Costa, R.~A. Lotufo, and S.~A. Velastin.
+\newblock Estimating crowd density with minkowski fractal dimension.
+\newblock In \emph{1999 IEEE International Conference on Acoustics, Speech, and
+  Signal Processing. Proceedings. ICASSP99 (Cat. No.99CH36258)}, volume~6,
+  pages 3521--3524, March 1999.
+
+\bibitem[Rahmalan et~al.(2006)Rahmalan, Nixon, and Carter]{main_paper}
+H.~Rahmalan, M.~S. Nixon, and J.~N. Carter.
+\newblock On crowd density estimation for surveillance.
+\newblock In \emph{2006 IET Conference on Crime and Security}, pages 540--545,
+  June 2006.
+
+\end{thebibliography}
