@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6630 64-bit) (preloaded format=pdflatex 2018.5.16)  25 JAN 2019 18:24
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6630 64-bit) (preloaded format=pdflatex 2018.5.16)  27 JAN 2019 18:15
 entering extended mode
 **"./Metode procjene gustoće mnoštva ljudi.tex"
 ("Metode procjene gustoće mnoštva ljudi.tex"
@@ -558,18 +558,18 @@ LaTeX Info: Redefining \cite on input line 694.
 ) ("Metode procjene gustoće mnoštva ljudi.aux")
 \openout1 = `"Metode procjene gustoće mnoštva ljudi.aux"'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
 
 ("C:\Users\JARVIS\AppData\Local\Programs\MiKTeX 2.9\tex\context\base\supp-pdf.m
 kii"
@@ -652,7 +652,7 @@ G,.JBIG2,.JB2,.eps]
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
 
-Overfull \hbox (39.92667pt too wide) in paragraph at lines 19--19
+Overfull \hbox (39.92667pt too wide) in paragraph at lines 18--18
  [][] 
  []
 
@@ -662,25 +662,31 @@ Overfull \hbox (39.92667pt too wide) in paragraph at lines 19--19
 Poglavlje 1.
 [1
 
-] [2] ("Metode procjene gustoće mnoštva ljudi.bbl" [3]
+] [2] [3] [4] [5] ("Metode procjene gustoće mnoštva ljudi.bbl" [6]
 LaTeX Font Info:    Try loading font information for T1+cmtt on input line 11.
 
 ("C:\Users\JARVIS\AppData\Local\Programs\MiKTeX 2.9\tex\latex\base\t1cmtt.fd"
 File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-Overfull \hbox (14.19006pt too wide) in paragraph at lines 9--13
+Overfull \hbox (323.86444pt too wide) in paragraph at lines 9--13
+\T1/cmtt/m/n/10 https://www.mathworks.com/matlabcentral/mlc-downloads/downloads
+/submissions/13063/versions/1/previews/boxcount/html/demo.html\T1/cmr/m/n/10 .
+ []
+
+
+Overfull \hbox (14.19006pt too wide) in paragraph at lines 15--19
 \T1/cmtt/m/n/10 https://www.peterkovesi.com/matlabfns/PhaseCongruency/phasecong
 3.m\T1/cmr/m/n/10 .
  []
 
-) [4
+) [7
 
 ] ("Metode procjene gustoće mnoštva ljudi.aux") ) 
 Here is how much of TeX's memory you used:
- 4699 strings out of 493305
- 68371 string characters out of 3129367
- 142379 words of memory out of 3000000
- 8170 multiletter control sequences out of 15000+200000
+ 4702 strings out of 493305
+ 68434 string characters out of 3129367
+ 142397 words of memory out of 3000000
+ 8173 multiletter control sequences out of 15000+200000
  15437 words of font info for 39 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  42i,9n,40p,942b,179s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -699,13 +705,15 @@ sers/JARVIS/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cm
 mi10.pfb><C:/Users/JARVIS/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/
 amsfonts/cm/cmmi7.pfb><C:/Users/JARVIS/AppData/Local/Programs/MiKTeX 2.9/fonts/
 type1/public/amsfonts/cm/cmr10.pfb><C:/Users/JARVIS/AppData/Local/Programs/MiKT
-eX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/JARVIS/AppData/Local/P
-rograms/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/JARVIS/A
-ppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
-Output written on "Metode procjene gustoće mnoštva ljudi.pdf" (5 pages, 17175
+eX 2.9/fonts/type1/public/amsfonts/cm/cmr5.pfb><C:/Users/JARVIS/AppData/Local/P
+rograms/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/JARVIS/App
+Data/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Us
+ers/JARVIS/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cms
+y7.pfb>
+Output written on "Metode procjene gustoće mnoštva ljudi.pdf" (8 pages, 20127
 3 bytes).
 PDF statistics:
- 330 PDF objects out of 1000 (max. 8388607)
+ 361 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

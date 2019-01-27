@@ -10,7 +10,6 @@
 \usepackage[croatian]{babel}
 \usepackage[round]{natbib}
 \bibliographystyle{plainnat}
-
 \begin{document}
 
 \title{Metode procjene gustoće mnoštva ljudi}
@@ -42,6 +41,8 @@ Visoka vrijednost funkcije fazne kongruencije označava da su komponente razvoja
 
 Ovako definirana fazna kongruencija vrlo je osjetljiva na šum u signalu. Međutim, postoje unaprijeđene gotove implementacije detekcije obrisa pomoću fazne kongruencije koje sadrže parametar kojim se odabire osjetljivost na šum. Zato je korištena gotova implementacija u MATLAB-u uz parametar $k = 10$ (preporučena vrijednost za slike s većom količinom šuma, pretpostavljena vrijednost je $k = 2$). Parametar k označava broj standardnih devijacija od srednje vrijednosti energije šuma gdje postavljamo prag za šum. 
 
+//DATI SLIKU S DETEKTIRANIM RUBOVIMA 
+
 \section{GLDM}
 Prva metoda ekstrakcije je GLDM (engl. \textit{Grey Level Dependency Matrix}). Osnova metode je konstrukcija matrice uvjetnih vjerojatnosti pojavljivanja para određenih nijansi sive, ovisno o udaljenosti $d$ i kutu $\theta$ kojim su dva piksela razdvojena. Prema \cite{main_paper}, korišteni parametri u ovom projektu su $d = 1$ i $\theta \in \left\lbrace0^\circ, 45^\circ, 90^\circ, 135^\circ\right\rbrace$.
 Neka je $G$ broj nijansi sive koje se nalaze na slici bez boje. Tada se definiraju 4 veličine koje se računaju iz dobivene matrice, a opisuju promatranu sliku - kontrast, homogenost, energija i entropija, uz redom oznake $C$, $H$, $Eg$ i $Et$.
@@ -60,9 +61,78 @@ Energija mjeri uniformnost distribucije nijansi sive na slici pa će slike s man
 Ekstrakcija značajki odvija se na sljedeći način: slike dimenzija $400 \times 400$ prelazi se pomičnim prozorom veličine $20 \times 20$ uz korak $r = 10$. Za svaki sliku iz pomičnog prozora, generiraju se 4 matrice GLDM, prošavši kroze sve kombinacije $d$ i $\theta$. Iz svake se matrice izračunaju opisane veličine. To znači da za svaku podsliku dobivamo 16 značajki, a na svakoj slici prolazimo kroz 1521 podsliku. Slijedi da sa svake slike ekstrahiramo $16 \cdot 1521 = 24336$ značajki koje je opisuju. Iz tog razloga, potrebno je reducirati dimenzionalnost dobivenih vektora značajki, o čemu će biti više riječi kod analize rezultata.
 
 \section{MFD}
-Druga metoda koja je korištena u projektu je MFD (Minkowski Fractal Dimension, ili još znano kao Minkowski-Boulignand Fractal Dimension). Prvi je put ova veličina korištena u radi \cite{mfd}.
+Druga metoda koja je korištena u projektu je MFD (Minkowski Fractal Dimension, ili još znano kao Minkowski-Bouligand Fractal Dimension). Prvi je put ova veličina korištena za procjenu gustoće mnoštva ljudi u radu \cite{mfd}. 
+
+Korištena je gotova implementacija u MATLAB-u gdje se ova veličina računa tako da se, prvo, slika na kojoj su detektirani obrisi binarizira koristeći određeni prag. Nakon toga, za $R = 1, 2, 4, ... , 2^P$ konstruira se kvadrat čija je duljina stranice upravo $R$ i broji koliko je takvih kvadrata potrebno da se pokriju svi bijeli pikseli na binariziranoj slici. Ovdje je $P$ najmanja broj za koji vrijedi $\max\left\lbrace x, y \right\rbrace \leq 2^P$, gdje su $x, y$ dimenzije slike.  
+
+Ako se pronađene točke ucrta na log-log grafu ovisnosti broja potrebnih kvadrata za pokrivanje obrisa o veličini pojedinog kvadrata, dobije se graf približno sličan pravcu. Neka je nagib tog približnog pravca označen s $S$, tj.:
+\begin{equation*}
+S = \frac{\mbox{d }{\log N}}{\mbox{d }{\log R}}.
+\end{equation*}
+Ako je $S$ približno konstantan za neki raspon od $R$, tada je on fraktalna dimenzija slike. U ovom se projektu koristi pretpostavka da je upravo to slučaj. $S$ se koristi kao jedina značajka kod ove metode.
+
+Uspješnost ove metode ovisi o uspješnosti načina kojim se detektiraju obrisi; zato se vrlo često događa da ne daje dobre rezultate ako na slici, osim mnoštva ljudi, postoje i drugi obrisi koji se mogu detektirati, a ne postoji valjan način kako ih eliminirati, primjerice tekstura podloge scene.
+//TODO UBACI SLIKU S DETEKTIRANOM PODLOGOM
+
+\section{TIOCM}
+Posljednja metoda korištena u ovom projektu TIOCM, što je kratica za Translation Invariant Orthonormal Chebyshev Moments \citep{main_paper}. Općenito, momenti su globalni deskriptori, odnosno opisuju sliku u cjelini. S druge strane, lokalni deskriptori opisuju dijelove dijelove slike, primjerice ključne točke. Zato se globalni deskriptori koriste kada se slika obrađuje na nižoj razini, primjerice kod detekcije objekata. Za prepoznavanje objekata bi se koristili lokalni deskriptori.
+
+Momenti koji se koriste u ovom projektu su diskretni Čebiševljevi momenti uz modifikaciju prema radu \cite{main_paper} koja ih čini invarijantnima na translaciju. Konkretno, Čebiševljev moment reda $m+n$ za binariziranu sliku s detektiranim obrisima veličine $N \times N$ se računa kao:
+\begin{equation*}
+T_{mn} = \sum_{i=0}^{N-1}\sum_{j=0}^{N-1}t_m(i-i_c)t_n(j-j_c)f(i,j)
+\end{equation*}
+gdje su $(i_c, j_c)$ koordinate centroida. $t_m, m = 0, ..., N-1$  je Čebiševljev polinom definiran rekurzijom:
+\begin{align*}
+&t_m(q) = \alpha_1 q t_{m-1}(q) + \alpha_2 t_{m-1}(q) + \alpha_3 t_{m-2}(q)\\
+&t_0(q) = N^{-\frac{1}{2}}\\
+&t_1(q) = \frac{\sqrt{3}(2q + 1 - N)}{\sqrt{N(N^2-1)}}\\
+\\
+&\alpha_1 = \frac{2\sqrt{4m^2 - 1}}{m\sqrt{N^2 - m^2}}\\
+&\alpha_2 = \frac{(1-N)\sqrt{4m^2 - 1}}{m\sqrt{N^2 - m^2}}\\
+&\alpha_3 = \frac{(m-1)\sqrt{2m+1}\sqrt{N^2-(m-1)^2}}{m\sqrt{2m - 3}\sqrt{N^2 - m^2}}
+\end{align*}
+Pokazuje se da je ovaj moment invarijantan na translaciju zahvaljujući oduzimanju koordinata centroida od koordinata svakog piksela. U projektu su, kao značajke, korišteni Čebiševljevi momenti od nultog do drugog reda, odnosno $m+n \in \left[0, 5\right]$, prema spomenutom radu.
+
+\section{SVM}
+Kao što je već rečeno, u ovom je projektu kao klasifikator korišten SVM zbog svojih povoljnih karakteristika kod manjeg skupa podataka. Osnovni cilj kod SVM-a jest pronaći vektor težina $\vec{w}$ koji na skupu za učenje maksimizira marginu - udaljenost između najbližih pripadnika zasebnih klasa. Formalno, decizijska funkcija SVM-a može se definirati kao:
+\begin{equation*}
+g(\vec{x}) = \vec{w}^T\vec{x} + b
+\end{equation*}
+Da bi se našlo vektor $\vec{w}$ koji maksimizira marginu, koristi se činjenica da je moguće skalirati vrijednost decizijske funkcije tako da je ona jednaka 1 za točke najbliže hiperravnini, iz čega slijedi da je potrebno maksimizirati:
+\begin{equation*}
+r = \frac{1}{\lVert \vec{w} \rVert}, \mbox{ uz ograničenja: } d_i(\vec{w}^T\vec{x_i} + b) \geq 1, i = 1,...,N,
+\end{equation*}
+gdje su $d_i = 1$ ako je uzorak s pozitivne strane hiperravnine, a ako je s negativne, onda je $d_i = -1$. Maksimizator ovog izraza ujedno minimizira 
+\begin{equation*}
+J = \frac{1}{2} \vec{w}^T\vec{w}
+\end{equation*}
+uz već spomenuta ograničenja. Formulira se Lagrangeova funkcija
+\begin{equation*}
+L(\vec{w}, b, \vec{\lambda}) = \frac{1}{2} \vec{w}^T\vec{w} - \sum_{i=1}^N\lambda_i\left[d_i(\vec{w}^T\vec{x_i} + b) - 1\right]
+\end{equation*}
+i zatim se ona minimizira. Optimalne vrijednosti Lagrangeovih multiplikatora dobivaju se prelaskom na dualni problem i maksimizacijom dobivenog izraza po multiplikatorima. Uz optimalne multiplikatore, optimalni vektor $\vec{w}$ je jednak:
+\begin{equation*}
+\vec{w} = \sum_{i=1}^N\lambda_id_i\vec{x_i}
+\end{equation*}
+Odavde slijedi da je moguće decizijsku funkciju SVM-a formulirati i kao:
+\begin{equation*}
+g(\vec{x}) = \sum_{i=1}^N\lambda_id_i\vec{x_i}^T\vec{x} + b.
+\end{equation*}
+Ovakav model ima dvije bitne pretpostavke: linearan je i razredi su linearno odvojivi. Ako je potreban nelinearan SVM, to je vrlo lako postići zamjenom skalarnog umnoška iz dualne formulacije SVM-a s nekom jezgrenom funkcijom, ukoliko je ta funkcija Mercerova, odnosno predstavlja skalarni umnožak transformiranih ulaznih vektora. 
+
+SVM koji je robusniji na razrede koji nisu linearno odvojivi postiže se reformulacijom ograničenja koja moraju biti zadovoljena, dopuštajući određenu grešku:
+\begin{align*}
+&d_i(\vec{w}^T\vec{x_i} + b) \geq 1 - \epsilon_i\\
+&\epsilon_i \geq 0
+\end{align*}
+Ciljna se funkcija proširuje kaznom za uzorke u čijoj klasifikaciji postoji greška:
+\begin{equation*}
+J = \frac{1}{2} \vec{w}^T\vec{w} + C \sum_{i=1}^N\epsilon_i
+\end{equation*}
+$C$ je parametar kojim se određuje širina margine: njegovim povećavanjem više se kažnjavaju pogrešno klasificirani uzorci što marginu čini užom. Manji $C$ više dopušta greške u klasifikaciji što čini marginu širom.
 
 \nocite{phasecong_impl}
+\nocite{boxcount_impl}
 \bibliography{literatura}	
 
 \end{document}
